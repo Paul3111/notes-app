@@ -2,10 +2,10 @@ const NotesModel = require ('./notesModel');
 
 describe('NotesModel.', () => {
 
-    let notes = new NotesModel();
+    let notes;
 
     beforeEach( () => {
-        const notes = new NotesModel(); 
+        notes = new NotesModel(); 
     });
 
     it('Initializes with an empty notes list.', () => {
@@ -15,8 +15,13 @@ describe('NotesModel.', () => {
 
     it('Adds a note to the list.', () => {
         notes.addNote('Buy milk');
+        expect(notes.getNotes()).toEqual (['Buy milk'])
+    });
+
+    it('Adds two notes to the list.', () => {
+        notes.addNote('Buy milk');
         notes.addNote('Go to the gym');
-        expect(notes.getNotes()).toEqual (['Buy milk','Go to the gym'])
+        expect(notes.getNotes()).toEqual (['Buy milk', 'Go to the gym'])
     });
 
     it('Resets the list of notes.', () => {
