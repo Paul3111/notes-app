@@ -7,7 +7,8 @@ class NotesView {
         this.button_1 = document.querySelector('#button-1');
 
         this.button_1.addEventListener('click', () => {
-            const newNote = document.querySelector('#message-input').value;
+            const messageInput = document.querySelector('#message-input');
+            const newNote = messageInput.value;
             this.addNewNote(newNote);
          });
      
@@ -15,10 +16,17 @@ class NotesView {
 
     addNewNote(newNote) {
         this.notes.addNote(newNote);
+        const whatever = document.querySelector('#message-input');
+        whatever.value = "";
         this.displayNotes();
     }
 
     displayNotes() {
+        const currNotes = document.querySelectorAll('.note');
+        currNotes.forEach ((note) => {
+            note.remove();
+        })
+
         const notesList = this.notes.getNotes()
         notesList.forEach(note => {
             const noteEl = document.createElement('div');

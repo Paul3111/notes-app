@@ -35,15 +35,22 @@
           this.mainContainerEl = document.querySelector("#main-container");
           this.button_1 = document.querySelector("#button-1");
           this.button_1.addEventListener("click", () => {
-            const newNote = document.querySelector("#message-input").value;
+            const messageInput = document.querySelector("#message-input");
+            const newNote = messageInput.value;
             this.addNewNote(newNote);
           });
         }
         addNewNote(newNote) {
           this.notes.addNote(newNote);
+          const whatever = document.querySelector("#message-input");
+          whatever.value = "";
           this.displayNotes();
         }
         displayNotes() {
+          const currNotes = document.querySelectorAll(".note");
+          currNotes.forEach((note) => {
+            note.remove();
+          });
           const notesList = this.notes.getNotes();
           notesList.forEach((note) => {
             const noteEl = document.createElement("div");
@@ -61,9 +68,6 @@
   var NotesModel = require_notesModel();
   var NotesView = require_notesView();
   var notes = new NotesModel();
-  notes.addNote("Buy sambuca.");
-  notes.addNote("Buy even more sambuca.");
-  notes.addNote("Buy coki-cola.");
   var views = new NotesView(notes);
   console.log("The notes app is running.");
   views.displayNotes();

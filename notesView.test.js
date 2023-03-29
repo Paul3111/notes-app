@@ -36,4 +36,23 @@ describe('Notes view.', () => {
         expect(document.querySelectorAll('div.note')[0].textContent).toEqual('Something new.');
     });
 
+    it('Clears previous notes.', () => {
+        document.body.innerHTML = fs.readFileSync('./index.html');
+        const model = new NotesModel();
+        const view = new NotesView(model);
+        view.displayNotes();
+
+        const buttonEl = document.querySelector('#button-1');
+        const inputEl = document.querySelector('#message-input');
+
+        inputEl.value = "walk the dog";
+        buttonEl.click();
+        
+        inputEl.value = "go fish";
+        buttonEl.click();
+
+        const notes = document.querySelectorAll('.note');
+        expect(notes.length).toBe (2);
+    });
+
   });
