@@ -20,7 +20,7 @@
         reset() {
           this.notes = [];
         }
-        SetNotes(item) {
+        setNotes(item) {
           this.notes = item;
         }
       };
@@ -63,8 +63,8 @@
           });
         }
         displayNotesFromApi() {
-          this.client.loadNotes((callback) => {
-            this.notes.SetNotes(callback);
+          this.client.loadNotes((data) => {
+            this.notes.setNotes(data);
             this.displayNotes();
           });
         }
@@ -78,7 +78,9 @@
     "notesClient.js"(exports, module) {
       var NotesClient2 = class {
         loadNotes(callback) {
-          fetch("http://localhost:3000/notes").then((response) => response.json()).then((data) => callback(data));
+          fetch("http://localhost:3000/notes").then((response) => response.json()).then((data) => {
+            callback(data);
+          });
         }
       };
       module.exports = NotesClient2;

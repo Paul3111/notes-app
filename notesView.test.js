@@ -3,13 +3,17 @@
  */
 
 const fs = require('fs');
-
+// const NotesClient = require('./notesClient');
 const NotesModel = require('./notesModel');
 const NotesView = require('./notesView'); 
 
 describe('Notes view.', () => {
-    it('Displays three notes.', () => {
+
+    beforeEach (() => {
         document.body.innerHTML = fs.readFileSync('./index.html');
+        })
+    
+    it('Displays three notes.', () => {
         const notes = new NotesModel();
         const display = new NotesView(notes);
 
@@ -21,8 +25,6 @@ describe('Notes view.', () => {
     });
 
     it('Inputs a new note and displays it on the page.', () => {
-        document.body.innerHTML = fs.readFileSync('./index.html');
-
         const note_1 = new NotesModel();
         const display = new NotesView(note_1);
 
@@ -37,7 +39,6 @@ describe('Notes view.', () => {
     });
 
     it('Clears previous notes.', () => {
-        document.body.innerHTML = fs.readFileSync('./index.html');
         const model = new NotesModel();
         const view = new NotesView(model);
         view.displayNotes();
@@ -54,4 +55,18 @@ describe('Notes view.', () => {
         const notes = document.querySelectorAll('.note');
         expect(notes.length).toBe (2);
     });
+
+    it('displayNotesFromApi', () => {
+        const mockData = ['Note1', 'Note2'];
+        const mockModel = {setNotes: jest.fn(), getNotes: () => mockData };
+        const mockClient = {loadNotes: (callback) => { callback(mockData) }};
+        const view = new NotesView(mockModel, mockClient);
+
+        view.displayNotesFromApi();
+        expect(mockModel.setNotes).toHaveBeenCalledWith(mockData);
+        expect(document.querySelector('div.note').textContent).toEqual ('Note1');
+        expect(document.querySelector('#main-container')).toBe;
+
+    })
+
   });

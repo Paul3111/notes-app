@@ -15,7 +15,7 @@ class NotesModel {
         this.notes = [];
     }
 
-    SetNotes (item) {
+    setNotes (item) {
         this.notes = item;
     }
 };

@@ -38,14 +38,10 @@ class NotesView {
     }
 
     displayNotesFromApi() {
-        this.client.loadNotes((callback) => {
-            this.notes.SetNotes(callback)
+        this.client.loadNotes((data) => {
+            this.notes.setNotes(data)
             this.displayNotes();
         })
-        
-        // const response = this.client.loadNotes(callback);
-        // this.notes.SetNotes(response);
-        // displayNotes();
     }
 };
 
