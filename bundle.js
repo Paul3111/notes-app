@@ -20,6 +20,9 @@
         reset() {
           this.notes = [];
         }
+        SetNotes(item) {
+          this.notes = item;
+        }
       };
       module.exports = NotesModel2;
     }
@@ -28,10 +31,10 @@
   // notesView.js
   var require_notesView = __commonJS({
     "notesView.js"(exports, module) {
-      var NotesModel2 = require_notesModel();
       var NotesView2 = class {
-        constructor(notes2) {
+        constructor(notes2, client2) {
           this.notes = notes2;
+          this.client = client2;
           this.mainContainerEl = document.querySelector("#main-container");
           this.button_1 = document.querySelector("#button-1");
           this.button_1.addEventListener("click", () => {
@@ -59,16 +62,36 @@
             this.mainContainerEl.append(noteEl);
           });
         }
+        displayNotesFromApi() {
+          this.client.loadNotes((callback) => {
+            this.notes.SetNotes(callback);
+            this.displayNotes();
+          });
+        }
       };
       module.exports = NotesView2;
+    }
+  });
+
+  // notesClient.js
+  var require_notesClient = __commonJS({
+    "notesClient.js"(exports, module) {
+      var NotesClient2 = class {
+        loadNotes(callback) {
+          fetch("http://localhost:3000/notes").then((response) => response.json()).then((data) => callback(data));
+        }
+      };
+      module.exports = NotesClient2;
     }
   });
 
   // index.js
   var NotesModel = require_notesModel();
   var NotesView = require_notesView();
+  var NotesClient = require_notesClient();
+  var client = new NotesClient();
   var notes = new NotesModel();
-  var views = new NotesView(notes);
+  var views = new NotesView(notes, client);
   console.log("The notes app is running.");
-  views.displayNotes();
+  views.displayNotesFromApi();
 })();

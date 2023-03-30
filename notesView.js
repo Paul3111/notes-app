@@ -1,8 +1,10 @@
-const NotesModel = require ('./notesModel');
+// const NotesModel = require ('./notesModel');
+// const NotesClient = require ('./notesClient');
 
 class NotesView {
-    constructor(notes) {
+    constructor(notes, client) {
         this.notes = notes;
+        this.client = client;
         this.mainContainerEl = document.querySelector('#main-container');
         this.button_1 = document.querySelector('#button-1');
 
@@ -33,6 +35,17 @@ class NotesView {
             noteEl.className = 'note';
             this.mainContainerEl.append(noteEl);
         })
+    }
+
+    displayNotesFromApi() {
+        this.client.loadNotes((callback) => {
+            this.notes.SetNotes(callback)
+            this.displayNotes();
+        })
+        
+        // const response = this.client.loadNotes(callback);
+        // this.notes.SetNotes(response);
+        // displayNotes();
     }
 };
 
