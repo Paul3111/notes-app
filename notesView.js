@@ -11,7 +11,6 @@ class NotesView {
             const newNote = messageInput.value;
             this.addNewNote(newNote);
          });
-     
     }
 
     addNewNote(newNote) {
@@ -35,8 +34,6 @@ class NotesView {
             this.mainContainerEl.append(noteEl);
         })
     }
-
-
 };
 
 module.exports = NotesView;
