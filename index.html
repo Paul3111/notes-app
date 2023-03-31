@@ -39,6 +39,12 @@ button {
   font-size: 18px;
   cursor: pointer;
 }
+
+.align-right {
+        text-align: right;
+        border: 0;
+      }
+
 </style>
 <html>
    <head>
@@ -46,9 +52,13 @@ button {
    </head>
    <body>
       <h1>Notes app</h1>
+      <div class="align-right">
+         <button type="button" id="button-2">Reset all notes</button>
+      </div>
+      <br>
       <div id="main-container">
          <input type='text' id="message-input"/>
-         <button id="button-1">Add note</button.>
+         <button type="button" id="button-1">Add note</button>
       </div>
       <script src="./bundle.js"> </script>
    </body>
