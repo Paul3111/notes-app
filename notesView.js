@@ -17,7 +17,7 @@ class NotesView {
         const whatever = document.querySelector('#message-input');
         whatever.value = "";
         this.displayNotes();
-        this.client.createNote({note: newNote});
+        this.client.createNote(newNote);
     }
 
     displayNotes() {
