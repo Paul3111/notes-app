@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-
+const fs = require('fs');
 const NotesClient = require('./notesClient');
 const NotesView = require('./notesView');
 
@@ -11,7 +11,6 @@ const NotesView = require('./notesView');
 require('jest-fetch-mock').enableMocks()
 
 describe('Client class', () => {
-    let mockClient;
     let view;
 
   it('Calls fetch and loads data.', (done) => {
@@ -42,15 +41,23 @@ describe('Client class', () => {
   });
 
     xit('Adds a note to the server.', () => {
+        document.body.innerHTML = fs.readFileSync('./index.html');
         const mockData = ['Mock note 1', 'Mock note 2'];
-        const mockAdd = 'go to the shop';
-        //mockClient = new NotesClient();
-        //mockClient.createNote = jest.fn();
-        const mockModel = {setNotes: jest.fn(), getNotes: () => mockData};
-        const mockClient = { createNote: () => mockAdd};
-        view = new NotesView(mockModel, mockClient)
-        view.displayNotesFromApi();
 
-        expect(mockClient.createNote).toHaveBeenCalledWith({note: mockAdd});
-    })
+        const mockModel = {
+          setNotes: jest.fn(),
+          getNotes: () => mockData,
+          addNote: jest.fn()};
+
+        const mockClient = { 
+          loadNotes: jest.fn((callback, callbackErr) => { callback(['Mock note 1', 'Mock note 2'])}),
+          createNote: jest.fn((data, callback, callbackErr) => { callback({ content: data, id: 1 })})
+        };
+
+        const view = new NotesView(mockModel, mockClient)
+        const messageInput = document.querySelector('#message-input');
+        messageInput.value = 'Go to the shop';
+        view.addNewNote(); 
+
+        expect(mockClient.createNote).toHaveBeenCalledWith('Go to the shop', expect.any(Function), expect.any(Function))});
 });
