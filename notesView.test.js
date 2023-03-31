@@ -25,17 +25,22 @@ describe('Notes view.', () => {
     });
 
     it('Inputs a new note and displays it on the page.', () => {
+        document.body.innerHTML = fs.readFileSync('./index.html');
         const note_1 = new NotesModel();
-        const display = new NotesView(note_1);
+        const mockData = ['Note1', 'Note2'];
+        const mockClient = {
+            createNote: jest.fn((data, callback, callbackErr) => {callback("Something new.")}),
+            loadNotes: jest.fn((callback, callbackErr) => {callback(['Note1', 'Note2', "Something new."]);})}
+
+        const display = new NotesView(note_1, mockClient);
 
         const input = document.querySelector('#message-input');
         input.value = "Something new."
 
         const button_1 = document.querySelector('#button-1');
         button_1.click();
-
-        expect(document.querySelectorAll('div.note').length).toEqual(1);
-        expect(document.querySelectorAll('div.note')[0].textContent).toEqual('Something new.');
+        expect(document.querySelectorAll('div.note').length).toEqual(3);
+        expect(document.querySelectorAll('div.note')[2].textContent).toEqual('Something new.');
     });
 
     it('Clears previous notes.', () => {

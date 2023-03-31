@@ -47,7 +47,8 @@
           this.notes.addNote(newNote);
           const whatever = document.querySelector("#message-input");
           whatever.value = "";
-          this.client.createNote(newNote, () => {
+          this.client.createNote(newNote, (data) => {
+            console.log(data);
             this.displayNotesFromApi();
           }, () => {
             this.displayError();
@@ -98,12 +99,13 @@
           });
         }
         createNote(data, callback, callbackErr) {
-          console.log("data", data);
           fetch("http://localhost:3000/notes", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ "content": data })
-          }).then((response) => response.json()).then((data2) => callback(data2)).catch((error) => {
+          }).then((response) => {
+            return response.json();
+          }).then((data2) => callback(data2)).catch((error) => {
             callbackErr(error);
           });
         }
