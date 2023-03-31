@@ -1,6 +1,3 @@
-// const NotesModel = require ('./notesModel');
-// const NotesClient = require ('./notesClient');
-
 class NotesView {
     constructor(notes, client) {
         this.notes = notes;
@@ -20,6 +17,7 @@ class NotesView {
         const whatever = document.querySelector('#message-input');
         whatever.value = "";
         this.displayNotes();
+        this.client.createNote({note: newNote});
     }
 
     displayNotes() {

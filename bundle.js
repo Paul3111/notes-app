@@ -48,6 +48,7 @@
           const whatever = document.querySelector("#message-input");
           whatever.value = "";
           this.displayNotes();
+          this.client.createNote({ note: newNote });
         }
         displayNotes() {
           const currNotes = document.querySelectorAll(".note");
@@ -82,6 +83,19 @@
             callback(data);
           });
         }
+        createNote(data) {
+          fetch("http://localhost:3000/notes", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ "content": data })
+          }).then((response) => {
+            return response.json();
+          }).then((data2) => {
+            console.log("Success:", data2);
+          }).catch((error) => {
+            console.error("Error:", error);
+          });
+        }
       };
       module.exports = NotesClient2;
     }
@@ -91,8 +105,8 @@
   var NotesModel = require_notesModel();
   var NotesView = require_notesView();
   var NotesClient = require_notesClient();
-  var client = new NotesClient();
   var notes = new NotesModel();
+  var client = new NotesClient();
   var views = new NotesView(notes, client);
   console.log("The notes app is running.");
   views.displayNotesFromApi();

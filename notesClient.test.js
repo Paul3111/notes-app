@@ -1,4 +1,9 @@
+/**
+ * @jest-environment jsdom
+ */
+
 const NotesClient = require('./notesClient');
+const NotesView = require('./notesView');
 
 // This makes `fetch` available to our test
 // (it is not by default, as normally `fetch` is only
@@ -6,6 +11,9 @@ const NotesClient = require('./notesClient');
 require('jest-fetch-mock').enableMocks()
 
 describe('Client class', () => {
+    let mockClient;
+    let view;
+
   it('Calls fetch and loads data.', (done) => {
     // 1. Instantiate the class
     const client = new NotesClient();
@@ -32,4 +40,17 @@ describe('Client class', () => {
       done();
     });
   });
+
+    it('Adds a note to the server.', () => {
+        const mockData = ['Mock note 1', 'Mock note 2'];
+        const mockAdd = 'go to the shop';
+        mockClient = new NotesClient();
+        mockClient.createNote = jest.fn();
+        const mockModel = {setNotes: jest.fn(), getNotes: () => mockData};
+        const mockClient = { createNote: () => mockAdd};
+        view = new NotesView(mockModel, mockClient)
+        view.displayNotesFromApi();
+
+        expect(mockClient.createNote).toHaveBeenCalledWith({note: mockAdd});
+    })
 });
