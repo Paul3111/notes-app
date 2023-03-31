@@ -16,8 +16,11 @@ class NotesView {
         this.notes.addNote(newNote);
         const whatever = document.querySelector('#message-input');
         whatever.value = "";
-        this.displayNotes();
-        this.client.createNote(newNote);
+        this.client.createNote(newNote, () => {
+            this.displayNotesFromApi();
+        }, () => {
+            this.displayError()
+        });       
     }
 
     displayNotes() {
@@ -39,7 +42,18 @@ class NotesView {
         this.client.loadNotes((data) => {
             this.notes.setNotes(data)
             this.displayNotes();
+        }, (callbackErr) => {
+            console.log(callbackErr)
+            this.displayError();
         })
+
+    }
+
+    displayError() {
+        const errorEl = document.createElement('div');
+        errorEl.textContent = "Oops, something went wrong!";
+        errorEl.className = 'note';
+        this.mainContainerEl.append(errorEl);
     }
 };
 

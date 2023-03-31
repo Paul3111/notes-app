@@ -69,4 +69,15 @@ describe('Notes view.', () => {
 
     })
 
+
+    it('Displays error message when fetch fails.', () => {
+        const mockData = ['Note1', 'Note2'];
+        const mockModel = {setNotes: jest.fn(), getNotes: () => mockData };
+        const mockClient = {loadNotes: (callback, callbackErr) => { callbackErr('error') }};
+        const view = new NotesView(mockModel, mockClient);
+
+        view.displayNotesFromApi();
+        expect(document.querySelector('div.note').textContent).toEqual ("Oops, something went wrong!");
+    })
+
   });

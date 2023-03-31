@@ -47,8 +47,11 @@
           this.notes.addNote(newNote);
           const whatever = document.querySelector("#message-input");
           whatever.value = "";
-          this.displayNotes();
-          this.client.createNote(newNote);
+          this.client.createNote(newNote, () => {
+            this.displayNotesFromApi();
+          }, () => {
+            this.displayError();
+          });
         }
         displayNotes() {
           const currNotes = document.querySelectorAll(".note");
@@ -67,7 +70,16 @@
           this.client.loadNotes((data) => {
             this.notes.setNotes(data);
             this.displayNotes();
+          }, (callbackErr) => {
+            console.log(callbackErr);
+            this.displayError();
           });
+        }
+        displayError() {
+          const errorEl = document.createElement("div");
+          errorEl.textContent = "Oops, something went wrong!";
+          errorEl.className = "note";
+          this.mainContainerEl.append(errorEl);
         }
       };
       module.exports = NotesView2;
@@ -78,22 +90,21 @@
   var require_notesClient = __commonJS({
     "notesClient.js"(exports, module) {
       var NotesClient2 = class {
-        loadNotes(callback) {
+        loadNotes(callback, callbackErr) {
           fetch("http://localhost:3000/notes").then((response) => response.json()).then((data) => {
             callback(data);
+          }).catch((error) => {
+            callbackErr(error);
           });
         }
-        createNote(data) {
+        createNote(data, callback, callbackErr) {
+          console.log("data", data);
           fetch("http://localhost:3000/notes", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ "content": data })
-          }).then((response) => {
-            return response.json();
-          }).then((data2) => {
-            console.log("Success:", data2);
-          }).catch((error) => {
-            console.error("Error:", error);
+          }).then((response) => response.json()).then((data2) => callback(data2)).catch((error) => {
+            callbackErr(error);
           });
         }
       };
