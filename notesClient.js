@@ -21,10 +21,18 @@ class NotesClient {
             .catch((error) => {callbackErr(error);});
     }
 
-    reset() {
+    reset(callback, callbackErr) {
         fetch("http://localhost:3000/notes", {
-        method: "DELETE"
+            method: "DELETE"
         })
+        .then(response => {
+            if (response.ok) {
+                callback();
+            } else {
+                throw new Error("Failed to reset notes.");
+            }
+        })
+        .catch(error => { callbackErr(error) });
     }
 }
 

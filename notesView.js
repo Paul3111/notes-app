@@ -5,6 +5,7 @@ class NotesView {
         this.mainContainerEl = document.querySelector('#main-container');
         this.button_1 = document.querySelector('#button-1');
         this.button_2 = document.querySelector('#button-2');
+        this.shortcodeRegex = /:[a-zA-Z0-9_]+:/g;
 
         this.button_1.addEventListener('click', () => {
             const messageInput = document.querySelector('#message-input');
@@ -20,11 +21,12 @@ class NotesView {
          });
     }
 
-    addNewNote(newNote) {
-        this.notes.addNote(newNote);
+    async addNewNote(newNote) {
+        const emojifiedNote = await this.emojify(newNote);
+        this.notes.addNote(emojifiedNote);
         const whatever = document.querySelector('#message-input');
         whatever.value = "";
-        this.client.createNote(newNote, (data) => {
+        this.client.createNote(emojifiedNote, (data) => {
             console.log(data)
             this.displayNotesFromApi();
         }, () => {
@@ -32,19 +34,34 @@ class NotesView {
         });       
     }
 
-    displayNotes() {
+    async displayNotes() {
         const currNotes = document.querySelectorAll('.note');
         currNotes.forEach ((note) => {
             note.remove();
         })
-
+    
         const notesList = this.notes.getNotes()
-        notesList.forEach(note => {
+        for(const note of notesList) {
             const noteEl = document.createElement('div');
-            noteEl.textContent = note;
+            noteEl.textContent = await this.emojify(note);
             noteEl.className = 'note';
             this.mainContainerEl.append(noteEl);
-        })
+        }
+    }
+
+    async emojify(note) {
+        try {
+            const response = await fetch("https://makers-emojify.herokuapp.com/", {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify( {"text": note} )
+            });
+            const data = await response.json();
+            return data.emojified_text;
+        } catch (error) {
+            console.error(error);
+            return note;
+        }
     }
 
     displayNotesFromApi() {
