@@ -1,4 +1,3 @@
-
 class NotesViewBrowser {
   constructor(notes, client) {
     this.notes = notes;
@@ -68,8 +67,8 @@ async emojify(note) {
 
 displayNotesFromApi() {
     this.client.loadNotes((data) => {
-        this.notes.setNotes(data)
-        this.displayNotes();
+      this.notes.setNotes(data)
+      this.displayNotes();
     }, (callbackErr) => {
         console.log(callbackErr)
         this.displayError();
