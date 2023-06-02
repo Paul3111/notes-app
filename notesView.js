@@ -21,33 +21,23 @@ class NotesView {
          });
     }
 */
-    constructor(notes, client) {
-      this.notes = notes;
-      this.client = client;
-      this.mainContainerEl = null;
-      this.button_1 = null;
-      this.button_2 = null;
-      this.shortcodeRegex = /:[a-zA-Z0-9_]+:/g;
-   }
 
-  initialize() {
-      this.mainContainerEl = document.querySelector('#main-container');
-      this.button_1 = document.querySelector('#button-1');
-      this.button_2 = document.querySelector('#button-2');
+constructor(notes, client) {
+  this.notes = notes;
+  this.client = client;
 
-      this.button_1.addEventListener('click', () => {
-          const messageInput = document.querySelector('#message-input');
-          const newNote = messageInput.value;
-          this.addNewNote(newNote);
-      });
+  // Create a null implementation for browser-specific methods
+  this.mainContainerEl = null;
+  this.button_1 = null;
+  this.button_2 = null;
+}
 
-      this.button_2.addEventListener('click', () => {
-          this.client.reset();
-          this.displayNotesFromApi();
-          location.reload();
-      });
-    }
-    
+initialize() {
+  console.error(
+    'Trying to initialize NotesView in a non-browser environment.'
+  );
+}
+
     async addNewNote(newNote) {
         const emojifiedNote = await this.emojify(newNote);
         this.notes.addNote(emojifiedNote);
