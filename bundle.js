@@ -28,24 +28,24 @@
     }
   });
 
-  // notesView.js
-  var require_notesView = __commonJS({
-    "notesView.js"(exports, module) {
-      var NotesView2 = class {
+  // notesViewBrowser.js
+  var require_notesViewBrowser = __commonJS({
+    "notesViewBrowser.js"(exports, module) {
+      var NotesViewBrowser2 = class {
         constructor(notes2, client2) {
           this.notes = notes2;
           this.client = client2;
+        }
+        initialize() {
           this.mainContainerEl = document.querySelector("#main-container");
           this.button_1 = document.querySelector("#button-1");
           this.button_2 = document.querySelector("#button-2");
-          this.shortcodeRegex = /:[a-zA-Z0-9_]+:/g;
           this.button_1.addEventListener("click", () => {
             const messageInput = document.querySelector("#message-input");
             const newNote = messageInput.value;
             this.addNewNote(newNote);
           });
           this.button_2.addEventListener("click", () => {
-            document.querySelector("div.note");
             this.client.reset();
             this.displayNotesFromApi();
             location.reload();
@@ -106,7 +106,7 @@
           this.mainContainerEl.append(errorEl);
         }
       };
-      module.exports = NotesView2;
+      module.exports = NotesViewBrowser2;
     }
   });
 
@@ -152,11 +152,11 @@
 
   // index.js
   var NotesModel = require_notesModel();
-  var NotesView = require_notesView();
+  var NotesViewBrowser = require_notesViewBrowser();
   var NotesClient = require_notesClient();
   var notes = new NotesModel();
   var client = new NotesClient();
-  var views = new NotesView(notes, client);
+  var views = new NotesViewBrowser(notes, client);
   console.log("The notes app is running.");
   views.displayNotesFromApi();
 })();
